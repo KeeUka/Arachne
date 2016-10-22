@@ -11,9 +11,9 @@ import javax.swing.JPanel;
 public class Window extends JFrame {
 
 	private JPanel topPanel;
-	private PanelInput panelInput;
-	private JPanel rightPanel;
-	private JPanel bottomPanel;
+	private ListPanel panelInput;
+	private ListPanel panelOutput;
+	private InfoPanel infoPanel;
 	
 	public Window() {
 		super("Arachne Project");
@@ -41,21 +41,15 @@ public class Window extends JFrame {
 		topPanel.setBorder(BorderFactory.createRaisedBevelBorder());
 		add(topPanel, BorderLayout.NORTH);
 		
-		// Left Panel
-		panelInput = new PanelInput();
+		panelInput = new ListPanel("Input Keywords (Read from input.txt)");
 		add(panelInput, BorderLayout.WEST);
 		
-		// Right Panel
-		rightPanel = new JPanel();
-		rightPanel.setPreferredSize(new Dimension(400, 450));
-		rightPanel.setBorder(BorderFactory.createRaisedBevelBorder());
-		add(rightPanel, BorderLayout.EAST);
+		panelOutput = new ListPanel("Output (Write to output.txt)");
+		add(panelOutput, BorderLayout.EAST);
 		
 		// Bottom Panel
-		bottomPanel = new JPanel();
-		bottomPanel.setPreferredSize(new Dimension(800, 50));
-		bottomPanel.setBorder(BorderFactory.createRaisedBevelBorder());
-		add(bottomPanel, BorderLayout.SOUTH);
+		infoPanel = new InfoPanel("Arachne is idling");
+		add(infoPanel, BorderLayout.SOUTH);
 	}
 	
 }

@@ -2,24 +2,24 @@ package net.keeratipong.arachne.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
-public class PanelInput extends JPanel {
+public class ListPanel extends JPanel {
 
+	private String title;
 	private JLabel label;
 	private JTextArea inputArea;
 
-	public PanelInput() {
+	public ListPanel(String title) {
+		this.title = title;
 		setPreferredSize(new Dimension(400, 450));
 		Border margin = new EmptyBorder(10,10,10,10);
 		setBorder(new CompoundBorder(BorderFactory.createRaisedBevelBorder(), margin));
@@ -29,7 +29,7 @@ public class PanelInput extends JPanel {
 	private void initComponents() {
 		setLayout(new BorderLayout());
 		
-		label = new JLabel("Input Keywords (Read from input.txt)");
+		label = new JLabel(title);
 		label.setPreferredSize(new Dimension(300, 30));
 		add(label, BorderLayout.NORTH);
 		
