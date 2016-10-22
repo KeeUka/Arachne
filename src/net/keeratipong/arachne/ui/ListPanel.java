@@ -27,13 +27,15 @@ public class ListPanel extends JPanel {
 		initComponents();
 	}
 	
-	public void setList(List<String> list) {
-		StringBuilder sb = new StringBuilder();
-		for(String s : list) {
-			sb.append(s);
-			sb.append("\n");
+	public void setList(List<String> list, InfoPanel infoPanel) {
+		for(int i = 0; i < list.size(); i++) {
+			listText.append(list.get(i));
+			listText.append("\n");
+			if(infoPanel != null) {
+				String msg = String.format("%d/%d input has been loaded.", i, list.size());
+				infoPanel.showInfoMessage(msg);
+			}
 		}
-		listText.setText(sb.toString());
 	}
 
 	private void initComponents() {

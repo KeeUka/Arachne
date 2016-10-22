@@ -14,9 +14,9 @@ import net.keeratipong.arachne.core.Arachne;
 public class Window extends JFrame {
 
 	private JPanel topPanel;
-	private ListPanel panelInput;
-	private ListPanel panelOutput;
-	private InfoPanel panelInfo;
+	private ListPanel inputPanel;
+	private ListPanel outputPanel;
+	private InfoPanel infoPanel;
 
 	private Arachne arachne;
 	
@@ -53,26 +53,26 @@ public class Window extends JFrame {
 		topPanel.setBorder(BorderFactory.createRaisedBevelBorder());
 		add(topPanel, BorderLayout.NORTH);
 
-		panelInput = new ListPanel("Input Keywords (Read from input.txt)");
-		add(panelInput, BorderLayout.WEST);
+		inputPanel = new ListPanel("Input Keywords (Read from input.txt)");
+		add(inputPanel, BorderLayout.WEST);
 
-		panelOutput = new ListPanel("Output (Write to output.txt)");
-		add(panelOutput, BorderLayout.EAST);
+		outputPanel = new ListPanel("Output (Write to output.txt)");
+		add(outputPanel, BorderLayout.EAST);
 
 		// Bottom Panel
-		panelInfo = new InfoPanel("Arachne is idling");
-		add(panelInfo, BorderLayout.SOUTH);
+		infoPanel = new InfoPanel("Arachne is idling");
+		add(infoPanel, BorderLayout.SOUTH);
 	}
 
 	private void reloadInput() {
 		try {
 			arachne.reloadInput();
 		} catch (IOException e) {
-			panelInfo.showErrorMessage("Failed to load input on input.txt.");
+			infoPanel.showErrorMessage("Failed to load input on input.txt.");
 			e.printStackTrace();
 		}
-		panelInput.setList(arachne.getInput());
-		panelInfo.showInfoMessage("Input data has been loaded.");
+		inputPanel.setList(arachne.getInput(), infoPanel);
+		infoPanel.showInfoMessage("Input data has been loaded.");
 	}
 	
 }
