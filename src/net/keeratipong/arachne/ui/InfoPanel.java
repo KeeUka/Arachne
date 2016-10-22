@@ -24,12 +24,23 @@ public class InfoPanel extends JPanel{
 		initComponents();
 	}
 	
+	public void showInfoMessage(String message) {
+		this.message = message;
+		label.setText(message);
+		label.setForeground(Color.green.darker());
+	}
+	
+	public void showErrorMessage(String message) {
+		this.message = message;
+		label.setText(message);
+		label.setForeground(Color.red.darker());
+	}
+	
 	private void initComponents() {
 		setLayout(new BorderLayout());
 		label = new JLabel(message);
 		label.setForeground(Color.green.darker());
 		add(label, BorderLayout.CENTER);
 	}
-
 	
 }
