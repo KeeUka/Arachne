@@ -3,6 +3,7 @@ package net.keeratipong.arachne.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -40,6 +41,7 @@ public class InfoPanel extends JPanel{
 		setLayout(new BorderLayout());
 		label = new JLabel(message);
 		label.setForeground(Color.green.darker());
+		label.setFont(new Font("Courier New", Font.ITALIC, 14));
 		add(label, BorderLayout.CENTER);
 	}
 	
