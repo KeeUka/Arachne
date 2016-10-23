@@ -48,6 +48,7 @@ public class Window extends JFrame {
 	public void start() {
 		reloadInput();
 		while(arachne.hasMoreInput()) {
+			infoPanel.showInfoMessage("Process Input: " + arachne.getNextInput());
 			arachne.processNextInput();
 			unprocessedInputPanel.setList(arachne.getInputList());
 			processedInputPanel.setList(resultKeys(arachne.getResults()));

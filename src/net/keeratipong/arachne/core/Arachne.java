@@ -32,6 +32,10 @@ public class Arachne {
 		return inputList;
 	}
 	
+	public String getNextInput() {
+		return inputList.get(0);
+	}
+	
 	public boolean hasMoreInput() {
 		return inputList != null && !inputList.isEmpty();
 	}
