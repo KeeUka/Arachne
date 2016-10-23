@@ -2,6 +2,7 @@ package net.keeratipong.arachne.core;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.keeratipong.arachne.util.FileHandler;
@@ -15,9 +16,12 @@ public class Arachne {
 
 	private BrowserHook browserHook;
 	private List<String> input;
+	private List<Result> results;
 
 	public Arachne() {
 		browserHook = new BrowserHook(HOST, PORT);
+		input = new ArrayList<String>();
+		results = new ArrayList<Result>();
 	}
 
 	public void reloadInput() throws FileNotFoundException, IOException {
@@ -27,7 +31,25 @@ public class Arachne {
 	public List<String> getInput() {
 		return input;
 	}
+	
+	public boolean hasMoreInput() {
+		return input != null && !input.isEmpty();
+	}
+	
+	public List<Result> getResults() {
+		return results;
+	}
 
+	public void processNextInput() {
+		if(input.isEmpty()) {
+			return;
+		}
+		// Do something
+		String key = input.remove(0);
+		Result result = new Result(key);
+		results.add(result);
+	}
+	
 	public BrowserHook getBrowserHook() {
 		return browserHook;
 	}

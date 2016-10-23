@@ -17,26 +17,26 @@ import javax.swing.border.EmptyBorder;
 public class ListPanel extends JPanel {
 
 	public static final int LINE_LIMIT = 20;
-	
+
 	private String title;
 	private JLabel label;
 	private JTextArea listText;
 
 	public ListPanel(String title) {
 		this.title = title;
-		setPreferredSize(new Dimension(400, 450));
-		Border margin = new EmptyBorder(10,10,10,10);
+		setPreferredSize(new Dimension(400, 220));
+		Border margin = new EmptyBorder(10, 10, 10, 10);
 		setBorder(new CompoundBorder(BorderFactory.createRaisedBevelBorder(), margin));
 		initComponents();
 	}
-	
+
 	public void setList(List<String> list) {
-		for(int i = 0; i < list.size(); i++) {
+		listText.setText("");
+		for (int i = 0; i < list.size(); i++) {
 			listText.append(list.get(i));
 			listText.append("\n");
-			if(i > LINE_LIMIT) {
-				listText.append("\n");
-				listText.append("... " + (list.size() - LINE_LIMIT) + " More Items ...");
+			if (i > LINE_LIMIT) {
+				listText.append("\n... " + (list.size() - LINE_LIMIT) + " More Items ...");
 				break;
 			}
 		}
@@ -44,11 +44,11 @@ public class ListPanel extends JPanel {
 
 	private void initComponents() {
 		setLayout(new BorderLayout());
-		
+
 		label = new JLabel(title);
 		label.setPreferredSize(new Dimension(300, 30));
 		add(label, BorderLayout.NORTH);
-		
+
 		listText = new JTextArea();
 		listText.setEditable(false);
 		listText.setFont(new Font("Courier New", Font.ITALIC, 14));

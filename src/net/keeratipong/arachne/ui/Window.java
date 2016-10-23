@@ -4,22 +4,26 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import net.keeratipong.arachne.core.Arachne;
+import net.keeratipong.arachne.core.Result;
 
 public class Window extends JFrame {
 
 	private JPanel topPanel;
-	private ListPanel inputPanel;
+	private ListPanel unprocessedInputPanel;
+	private ListPanel processedInputPanel;
 	private ListPanel outputPanel;
 	private InfoPanel infoPanel;
 
 	private Arachne arachne;
-	
+
 	public Window() {
 		super("Arachne Project");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -36,13 +40,23 @@ public class Window extends JFrame {
 	public void activate() {
 		setVisible(true);
 		recenter();
-		if(arachne == null) {
+		if (arachne == null) {
 			arachne = new Arachne();
 		}
 	}
-	
+
 	public void start() {
 		reloadInput();
+		while(arachne.hasMoreInput()) {
+			arachne.processNextInput();
+			unprocessedInputPanel.setList(arachne.getInput());
+			processedInputPanel.setList(resultKeys(arachne.getResults()));
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void initComponents() {
@@ -53,8 +67,17 @@ public class Window extends JFrame {
 		topPanel.setBorder(BorderFactory.createRaisedBevelBorder());
 		add(topPanel, BorderLayout.NORTH);
 
-		inputPanel = new ListPanel("Input Keywords (Read from input.txt)");
-		add(inputPanel, BorderLayout.WEST);
+		unprocessedInputPanel = new ListPanel("Unprocessed Input");
+		processedInputPanel = new ListPanel("Processed Input");
+		add(new JPanel() {
+
+			{
+				setLayout(new BorderLayout());
+				add(unprocessedInputPanel, BorderLayout.NORTH);
+				add(processedInputPanel, BorderLayout.SOUTH);
+			}
+
+		}, BorderLayout.WEST);
 
 		outputPanel = new ListPanel("Output (Write to output.txt)");
 		add(outputPanel, BorderLayout.EAST);
@@ -65,14 +88,23 @@ public class Window extends JFrame {
 	}
 
 	private void reloadInput() {
+		infoPanel.showInfoMessage("Loading input...");
 		try {
 			arachne.reloadInput();
 		} catch (IOException e) {
 			infoPanel.showErrorMessage("Failed to load input on input.txt.");
 			e.printStackTrace();
 		}
-		inputPanel.setList(arachne.getInput());
+		unprocessedInputPanel.setList(arachne.getInput());
 		infoPanel.showInfoMessage("Input data has been loaded.");
 	}
 	
+	private List<String> resultKeys(List<Result> results) {
+		List<String> keys = new ArrayList<String>();
+		for(Result r : results) {
+			keys.add(r.getKey());
+		}
+		return keys;
+	}
+
 }
