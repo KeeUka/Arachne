@@ -15,25 +15,25 @@ public class Arachne {
 	public static final int ACTION_DELAY = 1000;
 
 	private BrowserHook browserHook;
-	private List<String> input;
+	private List<String> inputList;
 	private List<Result> results;
 
 	public Arachne() {
 		browserHook = new BrowserHook(HOST, PORT);
-		input = new ArrayList<String>();
+		inputList = new ArrayList<String>();
 		results = new ArrayList<Result>();
 	}
 
-	public void reloadInput() throws FileNotFoundException, IOException {
-		input = FileHandler.readFile(INPUT_PATH);
+	public void reloadInputList() throws FileNotFoundException, IOException {
+		inputList = FileHandler.readFile(INPUT_PATH);
 	}
 
-	public List<String> getInput() {
-		return input;
+	public List<String> getInputList() {
+		return inputList;
 	}
 	
 	public boolean hasMoreInput() {
-		return input != null && !input.isEmpty();
+		return inputList != null && !inputList.isEmpty();
 	}
 	
 	public List<Result> getResults() {
@@ -41,11 +41,11 @@ public class Arachne {
 	}
 
 	public void processNextInput() {
-		if(input.isEmpty()) {
+		if(inputList.isEmpty()) {
 			return;
 		}
 		// Do something
-		String key = input.remove(0);
+		String key = inputList.remove(0);
 		Result result = new Result(key);
 		results.add(result);
 	}
@@ -60,7 +60,7 @@ public class Arachne {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		Arachne a = new Arachne();
-		a.reloadInput();
+		a.reloadInputList();
 		
 		// System.out.println(a.getInput().size());
 		// a.getBrowserHook().start();

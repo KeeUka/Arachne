@@ -49,7 +49,7 @@ public class Window extends JFrame {
 		reloadInput();
 		while(arachne.hasMoreInput()) {
 			arachne.processNextInput();
-			unprocessedInputPanel.setList(arachne.getInput());
+			unprocessedInputPanel.setList(arachne.getInputList());
 			processedInputPanel.setList(resultKeys(arachne.getResults()));
 			try {
 				Thread.sleep(2000);
@@ -90,12 +90,12 @@ public class Window extends JFrame {
 	private void reloadInput() {
 		infoPanel.showInfoMessage("Loading input...");
 		try {
-			arachne.reloadInput();
+			arachne.reloadInputList();
 		} catch (IOException e) {
 			infoPanel.showErrorMessage("Failed to load input on input.txt.");
 			e.printStackTrace();
 		}
-		unprocessedInputPanel.setList(arachne.getInput());
+		unprocessedInputPanel.setList(arachne.getInputList());
 		infoPanel.showInfoMessage("Input data has been loaded.");
 	}
 	
