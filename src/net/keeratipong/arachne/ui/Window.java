@@ -71,7 +71,7 @@ public class Window extends JFrame {
 			infoPanel.showErrorMessage("Failed to load input on input.txt.");
 			e.printStackTrace();
 		}
-		inputPanel.setList(arachne.getInput(), infoPanel);
+		inputPanel.setList(arachne.getInput());
 		infoPanel.showInfoMessage("Input data has been loaded.");
 	}
 	

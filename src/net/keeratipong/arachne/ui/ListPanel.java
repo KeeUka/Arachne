@@ -2,6 +2,7 @@ package net.keeratipong.arachne.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -15,6 +16,8 @@ import javax.swing.border.EmptyBorder;
 
 public class ListPanel extends JPanel {
 
+	public static final int LINE_LIMIT = 20;
+	
 	private String title;
 	private JLabel label;
 	private JTextArea listText;
@@ -27,13 +30,14 @@ public class ListPanel extends JPanel {
 		initComponents();
 	}
 	
-	public void setList(List<String> list, InfoPanel infoPanel) {
+	public void setList(List<String> list) {
 		for(int i = 0; i < list.size(); i++) {
 			listText.append(list.get(i));
 			listText.append("\n");
-			if(infoPanel != null) {
-				String msg = String.format("%d/%d input has been loaded.", i, list.size());
-				infoPanel.showInfoMessage(msg);
+			if(i > LINE_LIMIT) {
+				listText.append("\n");
+				listText.append("... " + (list.size() - LINE_LIMIT) + " More Items ...");
+				break;
 			}
 		}
 	}
@@ -47,6 +51,7 @@ public class ListPanel extends JPanel {
 		
 		listText = new JTextArea();
 		listText.setEditable(false);
+		listText.setFont(new Font("Courier New", Font.ITALIC, 14));
 		JScrollPane sp = new JScrollPane(listText);
 		sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		add(sp, BorderLayout.CENTER);
