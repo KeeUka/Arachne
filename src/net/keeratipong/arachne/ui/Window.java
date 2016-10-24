@@ -123,39 +123,100 @@ public class Window extends JFrame {
 			arachne.reloadInputList();
 		} catch (IOException e) {
 			infoPanel.showErrorMessage("Failed to load input on input.txt.");
-			e.printStackTrace();
 		}
 		unprocessedInputPanel.setList(arachne.getInputList());
 		infoPanel.showInfoMessage("Input data has been loaded.");
 	}
 
-	private List<String> resultKeys(List<Result> results) {
-		List<String> keys = new ArrayList<String>();
-		for (Result r : results) {
-			keys.add(r.getKey());
+	private boolean hookBrowser() {
+		try {
+			arachne.getBrowserHook().start();
+		} catch (IOException e) {
+			infoPanel.showErrorMessage("Fail to connect to Firefox.");
+			return false;
 		}
-		return keys;
+		infoPanel.showInfoMessage("Firefox is successfully connected.");
+		return true;
+	}
+
+	private boolean goToUrl(String url) {
+		try {
+			arachne.getBrowserHook().setUrlAndWaitForChange(url);
+		} catch (IOException e) {
+			infoPanel.showErrorMessage(url);
+			return false;
+		}
+		infoPanel.showInfoMessage("Arachene arrived on " + url);
+		return true;
+	}
+
+	private List<String> getAllWhitelistedLinks() {
+		try {
+			return arachne.getBrowserHook().getAllAbsoluteWhiteListLinks();
+		} catch (IOException e) {
+			infoPanel.showErrorMessage("Could not get links on the page.");
+			return null;
+		}
 	}
 
 	class Worker extends SwingWorker<String, String> {
 
 		@Override
 		protected String doInBackground() throws Exception {
-			if(arachne.getInputList() == null || arachne.getInputList().isEmpty()) {
+			// Reload the input
+			if (arachne.getInputList() == null || arachne.getInputList().isEmpty()) {
 				reloadInput();
 			}
+			// Start to hook with browser
+			if (!hookBrowser()) {
+				return null;
+			}
+
+			// Go to google
+			if (!goToUrl("http://www.google.com")) {
+				return null;
+			}
+
+			String googleUrl = arachne.getBrowserHook().getCurrentUrl();
+
+			int count = 0;
 			while (arachne.hasMoreInput()) {
-				String input = arachne.getNextInput();
-				arachne.processNextInput();
-				infoPanel.showInfoMessage("Process Input: " + input);
-				unprocessedInputPanel.setList(arachne.getInputList());
-				processedInputPanel.setList(resultKeys(arachne.getResults()));
+				count ++;
+				String keyword = arachne.googleQuery(arachne.getNextInput());
+				if (!goToUrl(googleUrl + "#q=" + keyword)) {
+					break;
+				}
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e) {
 					return null;
 				}
+				List<String> links = getAllWhitelistedLinks();
+				if(links == null || links.isEmpty()) {
+					break;
+				}
+				String target = links.get(0);
+				System.out.println(count + ": " + keyword + " => " + target);
+				try {
+					Thread.sleep(10000);
+				} catch (InterruptedException e) {
+					return null;
+				}
+				arachne.getInputList().remove(0);
 			}
+
+			// while (arachne.hasMoreInput()) {
+			// String input = arachne.getNextInput();
+			// arachne.processNextInput();
+			// infoPanel.showInfoMessage("Process Input: " + input);
+			// unprocessedInputPanel.setList(arachne.getInputList());
+			// processedInputPanel.setList(resultKeys(arachne.getResults()));
+			// try {
+			// Thread.sleep(2000);
+			// } catch (InterruptedException e) {
+			// return null;
+			// }
+			// }
 			return null;
 		}
 
