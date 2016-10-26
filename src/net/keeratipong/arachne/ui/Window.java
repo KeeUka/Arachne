@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,7 +17,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
+import edu.uci.ics.crawler4j.crawler.CrawlConfig;
+import edu.uci.ics.crawler4j.crawler.CrawlController;
+import edu.uci.ics.crawler4j.fetcher.PageFetcher;
+import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
+import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import net.keeratipong.arachne.core.Arachne;
+import net.keeratipong.arachne.crawler.Crawler;
+import net.keeratipong.arachne.crawler.CrawlerState;
 
 public class Window extends JFrame {
 
@@ -53,6 +62,7 @@ public class Window extends JFrame {
 
 	private void start() {
 		worker = new Worker();
+		CrawlerState.getInstance().addObserver(worker);
 		worker.execute();
 	}
 
@@ -158,7 +168,7 @@ public class Window extends JFrame {
 		}
 	}
 
-	class Worker extends SwingWorker<String, String> {
+	class Worker extends SwingWorker<String, String> implements Observer {
 
 		@Override
 		protected String doInBackground() throws Exception {
@@ -200,6 +210,8 @@ public class Window extends JFrame {
 				outputPanel.append("# Key: " + keyword);
 				outputPanel.append("# Root: " + target);
 				
+				crawl(target);
+				
 				try {
 					Thread.sleep(10000);
 				} catch (InterruptedException e) {
@@ -210,6 +222,35 @@ public class Window extends JFrame {
 			return null;
 		}
 
+		private void crawl(String root) throws Exception {
+			CrawlerState.getInstance().setDomain(root);
+			
+			String crawlStorageFolder = "./log";
+	        int numberOfCrawlers = 1;
+	        
+	        CrawlConfig config = new CrawlConfig();
+	        config.setCrawlStorageFolder(crawlStorageFolder);
+
+	        PageFetcher pageFetcher = new PageFetcher(config);
+	        RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+	        RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+	        CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
+
+	        controller.addSeed(CrawlerState.getInstance().getDomain());
+	        controller.start(Crawler.class, numberOfCrawlers);
+		}
+
+		@Override
+		public void update(Observable o, Object arg) {
+			if(arg.toString().equals(CrawlerState.UPDATE_EMAIL)) {
+				infoPanel.showInfoMessage("Email Found: " + CrawlerState.getInstance().getLastEmailFound());
+				outputPanel.append("# Email Found: " + CrawlerState.getInstance().getLastEmailFound());
+			} else if(arg.toString().equals(CrawlerState.UPDATE_URL)) {
+				infoPanel.showInfoMessage("Scraping : " + CrawlerState.getInstance().getCurrentUrl());
+				outputPanel.append("Scraping : " + CrawlerState.getInstance().getCurrentUrl());
+			}
+		}
+		
 	}
 
 }

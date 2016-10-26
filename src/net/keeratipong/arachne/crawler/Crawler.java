@@ -2,7 +2,6 @@ package net.keeratipong.arachne.crawler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
