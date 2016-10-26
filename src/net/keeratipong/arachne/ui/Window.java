@@ -36,7 +36,7 @@ public class Window extends JFrame {
 		super("Arachne Project");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(true);
-		setSize(800, 600);
+		setSize(1000, 600);
 		initComponents();
 	}
 
@@ -110,6 +110,7 @@ public class Window extends JFrame {
 		}, BorderLayout.WEST);
 
 		outputPanel = new ListPanel("Output (Write to output.txt)");
+		outputPanel.setPreferredSize(new Dimension(600,220));
 		add(outputPanel, BorderLayout.EAST);
 
 		// Bottom Panel
@@ -196,7 +197,11 @@ public class Window extends JFrame {
 					break;
 				}
 				String target = links.get(0);
-				System.out.println(count + ": " + keyword + " => " + target);
+				
+				outputPanel.append("# #####################");
+				outputPanel.append("# Key: " + keyword);
+				outputPanel.append("# Root: " + target);
+				
 				try {
 					Thread.sleep(10000);
 				} catch (InterruptedException e) {
@@ -204,19 +209,6 @@ public class Window extends JFrame {
 				}
 				arachne.getInputList().remove(0);
 			}
-
-			// while (arachne.hasMoreInput()) {
-			// String input = arachne.getNextInput();
-			// arachne.processNextInput();
-			// infoPanel.showInfoMessage("Process Input: " + input);
-			// unprocessedInputPanel.setList(arachne.getInputList());
-			// processedInputPanel.setList(resultKeys(arachne.getResults()));
-			// try {
-			// Thread.sleep(2000);
-			// } catch (InterruptedException e) {
-			// return null;
-			// }
-			// }
 			return null;
 		}
 
