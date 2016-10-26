@@ -7,7 +7,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -17,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
 import net.keeratipong.arachne.core.Arachne;
-import net.keeratipong.arachne.core.Result;
 
 public class Window extends JFrame {
 
