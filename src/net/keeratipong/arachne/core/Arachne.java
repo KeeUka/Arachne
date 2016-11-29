@@ -61,31 +61,4 @@ public class Arachne {
 	public String googleQuery(String searchTerm) {
 		return searchTerm.replaceAll("\\s+", "+");
 	}
-
-	public static void main(String[] args) throws FileNotFoundException, IOException {
-		Arachne a = new Arachne();
-		a.reloadInputList();
-		
-		// System.out.println(a.getInput().size());
-		// a.getBrowserHook().start();
-		// a.getBrowserHook().setUrlAndWaitForChange("http://www.google.com");
-		// String googleUrl = a.getBrowserHook().getCurrentUrl();
-		// String searchUrl = googleUrl + "#q=keeratipong";
-		// a.getBrowserHook().setUrlAndWaitForChange(searchUrl);
-		// System.out.println(a.getBrowserHook().getCurrentUrl());
-
-		// // System.out.println(a.getBrowserHook().getCurrentUrl());
-		// a.getBrowserHook().setUrl("https://www.google.co.th/search?q=test&ie=utf-8&oe=utf-8&client=firefox-b-ab&gws_rd=cr&ei=ZmcKWLegAsX-vgTZkYWYDw#q=keeratipong");
-		//
-		// System.out.println(a.getBrowserHook().getPageHtml());
-		// List<String> links =
-		// a.getBrowserHook().getAllAbsoluteWhiteListLinks();
-		// String firstLink = links.get(0);
-		// System.out.println("First link = " + firstLink);
-		// // a.getBrowserHook().setUrl(firstLink);
-		// for(String s : links) {
-		// System.out.println(s);
-		// }
-	}
-
 }

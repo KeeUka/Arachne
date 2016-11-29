@@ -12,6 +12,8 @@ public class CrawlerState extends Observable {
 	private String domain;
 	private String currentUrl;
 	private String lastEmailFound;
+	private int urlsCount;
+	
 	
 	public static CrawlerState getInstance() {
 		if (instance == null) {
@@ -25,13 +27,20 @@ public class CrawlerState extends Observable {
 	
 	public void setDomain(String domain) {
 		this.domain = domain;
-		System.out.println("Domain = " + domain);
 	}
 
 	public void setCurrentUrl(String currentUrl) {
 		this.currentUrl = currentUrl;
 		setChanged();
 		notifyObservers(UPDATE_URL);
+	}
+	
+	public void increaseUrlCount() {
+		urlsCount++;
+	}
+	
+	public void resetUrlCount() {
+		urlsCount = 0;
 	}
 	
 	public void setLastEmailFound(String lastEmailFound) {
@@ -50,6 +59,10 @@ public class CrawlerState extends Observable {
 	
 	public String getLastEmailFound() {
 		return lastEmailFound;
+	}
+	
+	public int getUrlsCount() {
+		return urlsCount;
 	}
 	
 }

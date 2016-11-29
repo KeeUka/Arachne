@@ -25,17 +25,20 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import net.keeratipong.arachne.core.Arachne;
 import net.keeratipong.arachne.crawler.Crawler;
 import net.keeratipong.arachne.crawler.CrawlerState;
+import net.keeratipong.arachne.util.FileHandler;
 
 public class Window extends JFrame {
 
 	private JPanel topPanel;
 	private JButton startButton;
 	private JButton stopButton;
+	
 	private ListPanel unprocessedInputPanel;
 	private ListPanel processedInputPanel;
 	private ListPanel outputPanel;
+	private TargetObject targetObject;
+	
 	private InfoPanel infoPanel;
-
 	private Arachne arachne;
 	private Worker worker;
 
@@ -44,6 +47,7 @@ public class Window extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(true);
 		setSize(1000, 600);
+		targetObject = new TargetObject();
 		initComponents();
 	}
 
@@ -117,7 +121,7 @@ public class Window extends JFrame {
 
 		}, BorderLayout.WEST);
 
-		outputPanel = new ListPanel("Output (Write to output.txt)");
+		outputPanel = new ListPanel("Current Target");
 		outputPanel.setPreferredSize(new Dimension(600,220));
 		add(outputPanel, BorderLayout.EAST);
 
@@ -188,36 +192,29 @@ public class Window extends JFrame {
 
 			String googleUrl = arachne.getBrowserHook().getCurrentUrl();
 
-			int count = 0;
 			while (arachne.hasMoreInput()) {
-				count ++;
+				Thread.sleep(5000);
 				String keyword = arachne.googleQuery(arachne.getNextInput());
 				if (!goToUrl(googleUrl + "#q=" + keyword)) {
 					break;
 				}
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					return null;
-				}
+
 				List<String> links = getAllWhitelistedLinks();
 				if(links == null || links.isEmpty()) {
 					break;
 				}
 				String target = links.get(0);
 				
-				outputPanel.append("# #####################");
-				outputPanel.append("# Key: " + keyword);
-				outputPanel.append("# Root: " + target);
+				targetObject.refresh(target, keyword);
+				outputPanel.setString(targetObject.toString());
 				
 				crawl(target);
 				
-				try {
-					Thread.sleep(10000);
-				} catch (InterruptedException e) {
-					return null;
-				}
-				arachne.getInputList().remove(0);
+				String s = arachne.getInputList().remove(0);
+				unprocessedInputPanel.setList(arachne.getInputList());
+				processedInputPanel.append(s);
+				
+				FileHandler.writeFile(targetObject.toString(), "output.txt");
 			}
 			return null;
 		}
@@ -225,11 +222,15 @@ public class Window extends JFrame {
 		private void crawl(String root) throws Exception {
 			CrawlerState.getInstance().setDomain(root);
 			
-			String crawlStorageFolder = "./log";
+			String crawlStorageFolder = "./log/" + root.toLowerCase();
 	        int numberOfCrawlers = 1;
 	        
 	        CrawlConfig config = new CrawlConfig();
 	        config.setCrawlStorageFolder(crawlStorageFolder);
+	        config.setMaxDepthOfCrawling(2);
+	        config.setMaxPagesToFetch(10);
+	        config.setFollowRedirects(true);
+	        config.setIncludeHttpsPages(true);
 
 	        PageFetcher pageFetcher = new PageFetcher(config);
 	        RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
@@ -238,17 +239,17 @@ public class Window extends JFrame {
 
 	        controller.addSeed(CrawlerState.getInstance().getDomain());
 	        controller.start(Crawler.class, numberOfCrawlers);
+	        
 		}
 
 		@Override
 		public void update(Observable o, Object arg) {
-			if(arg.toString().equals(CrawlerState.UPDATE_EMAIL)) {
-				infoPanel.showInfoMessage("Email Found: " + CrawlerState.getInstance().getLastEmailFound());
-				outputPanel.append("# Email Found: " + CrawlerState.getInstance().getLastEmailFound());
-			} else if(arg.toString().equals(CrawlerState.UPDATE_URL)) {
-				infoPanel.showInfoMessage("Scraping : " + CrawlerState.getInstance().getCurrentUrl());
-				outputPanel.append("Scraping : " + CrawlerState.getInstance().getCurrentUrl());
+			if(arg.toString().equals(CrawlerState.UPDATE_EMAIL)) {				
+				targetObject.addEmail(CrawlerState.getInstance().getLastEmailFound());
+			} else if(arg.toString().equals(CrawlerState.UPDATE_URL)) {				
+				targetObject.addLink(CrawlerState.getInstance().getCurrentUrl());
 			}
+			outputPanel.setString(targetObject.toString());
 		}
 		
 	}

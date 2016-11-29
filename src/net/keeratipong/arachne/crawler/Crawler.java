@@ -24,6 +24,7 @@ public class Crawler extends WebCrawler {
 	public void visit(Page page) {
 		String url = page.getWebURL().getURL();
 		CrawlerState.getInstance().setCurrentUrl(url);
+		CrawlerState.getInstance().increaseUrlCount();
 		if (page.getParseData() instanceof HtmlParseData) {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 			String html = htmlParseData.getHtml();

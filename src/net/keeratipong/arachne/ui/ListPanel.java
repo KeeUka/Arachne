@@ -46,6 +46,10 @@ public class ListPanel extends JPanel {
 		listText.append(s);
 		listText.append("\n");
 	}
+	
+	public void setString(String s) {
+		listText.setText(s);
+	}
 
 	private void initComponents() {
 		setLayout(new BorderLayout());

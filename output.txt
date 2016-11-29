@@ -1,0 +1,51 @@
+#############################
+Key: glazziq
+Root: https://www.glazziq.com/
+Links Crawled Count: 56
+Emails Found Count: 3
+Emails:
+help@glazziq.com
+jobs@glazziq.com
+support@glazziq.com
+#############################
+Key: glazziq
+Root: https://www.glazziq.com/
+Links Crawled Count: 9
+Emails Found Count: 2
+Emails:
+help@glazziq.com
+jobs@glazziq.com
+#############################
+Key: fastwork
+Root: https://fastwork.co/
+Links Crawled Count: 10
+Emails Found Count: 1
+Emails:
+hello@fastwork.co
+#############################
+Key: grab+taxi
+Root: http://www.grab.com/th/en/taxi/
+Links Crawled Count: 1
+Emails Found Count: 2
+Emails:
+support.th.bkk@grab.com
+support.bkk@grab.com
+#############################
+Key: launchpad
+Root: https://global.novationmusic.com/launch/launchpad
+Links Crawled Count: 9
+Emails Found Count: 1
+Emails:
+makkaq@compoundeye.co.uk
+#############################
+Key: agoda
+Root: https://www.agoda.com/
+Links Crawled Count: 10
+Emails Found Count: 6
+Emails:
+agoda-logo@2x.png
+icon-pointer@2x.png
+icon-bed@2x.png
+agoda-logo@2X.png
+icon-heart@2x.png
+logo-priceline@2x.png
